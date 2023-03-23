@@ -40,6 +40,7 @@ class _BlePeripheralWidgetState extends State<BlePeripheralWidget> {
   late final FlutterBlePeripheralService service;
   bool _isAdvertising = false;
   String receivedText = '';
+  List<String> connectedDevices = [];
 
   @override
   void initState() {
@@ -50,6 +51,16 @@ class _BlePeripheralWidgetState extends State<BlePeripheralWidget> {
       characteristics: [characteristic],
     );
     _blePeripheral.addCharacteristicToUpdateCallback(characteristic, _updateCallback);
+    _blePeripheral.setOnDeviceConnectedCallback(
+      (String uuid) {
+        _updateConnectedDevices(uuid, true);
+      }
+    );
+    _blePeripheral.setOnDeviceDisconnectedCallback(
+      (String uuid) {
+        _updateConnectedDevices(uuid, false);
+      }
+    );
   }
 
   @override
@@ -61,6 +72,16 @@ class _BlePeripheralWidgetState extends State<BlePeripheralWidget> {
   void _updateCallback(List<int> value) {
     setState(() {
       receivedText = String.fromCharCodes(value);
+    });
+  }
+
+  void _updateConnectedDevices(String uuid, bool isConnection) {
+    setState(() {
+      if (isConnection) {
+        connectedDevices.add(uuid);
+      } else {
+        connectedDevices.remove(uuid);
+      }
     });
   }
 
@@ -108,6 +129,9 @@ class _BlePeripheralWidgetState extends State<BlePeripheralWidget> {
         ),
         Text(
           'Received Text: $receivedText',
+        ),
+        Text(
+          'Connected Devices: ${connectedDevices.join(', ')}',
         )
       ],
     );

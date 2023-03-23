@@ -15,11 +15,21 @@ public class FlutterBlePeripheralPlugin: NSObject, FlutterPlugin {
         let instance = FlutterBlePeripheralPlugin(channel: channel)
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
+    
+    private func onDeviceConnected(uuid: String) {
+        self.channel.invokeMethod("onDeviceConnected", arguments: ["uuid": uuid])
+    }
+
+    private func onDeviceDisconnected(uuid: String) {
+        self.channel.invokeMethod("onDeviceDisconnected", arguments: ["uuid": uuid])
+    }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
         case FlutterBlePeripheralConstants.initialize:
-            peripheralManager = PeripheralManager()
+            peripheralManager = PeripheralManager(
+                onDeviceConnected: onDeviceConnected,
+                onDeviceDisconnected: onDeviceDisconnected)
             result(nil)
         case FlutterBlePeripheralConstants.startAdvertising:
             if let args = call.arguments as? [String: Any] {

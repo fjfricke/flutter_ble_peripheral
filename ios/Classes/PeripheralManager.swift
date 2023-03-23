@@ -6,8 +6,13 @@ class PeripheralManager: NSObject, CBPeripheralManagerDelegate {
     private var peripheralManager: CBPeripheralManager!
     private var services: [CBMutableService] = []
     private var characteristicUpdateCallback: CharacteristicUpdateCallback?
+    
+    private let onDeviceConnected: (String) -> Void
+    private let onDeviceDisconnected: (String) -> Void
 
-    override init() {
+    init(onDeviceConnected: @escaping (String) -> Void, onDeviceDisconnected: @escaping (String) -> Void) {
+        self.onDeviceConnected = onDeviceConnected
+        self.onDeviceDisconnected = onDeviceDisconnected
         super.init()
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
     }
@@ -58,5 +63,13 @@ class PeripheralManager: NSObject, CBPeripheralManagerDelegate {
             }
             peripheralManager.respond(to: request, withResult: .success)
         }
+    }
+    
+    func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
+        self.onDeviceConnected(central.identifier.uuidString)
+    }
+
+    func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didUnsubscribeFrom characteristic: CBCharacteristic) {
+        self.onDeviceDisconnected(central.identifier.uuidString)
     }
 }
