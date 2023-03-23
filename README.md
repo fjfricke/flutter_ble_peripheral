@@ -1,15 +1,13 @@
 # flutter_ble_peripheral
 
-Flutter Plugin to use the device as BLE peripheral
+This Flutter plugin allows a device to be used in Peripheral mode. It can be used to advertise to central devices and send data to them as well to subscribe to data from them.
 
-## Getting Started
+This plugin is loosely based on [flutter_ble_peripheral](https://github.com/juliansteenbakker/flutter_ble_peripheral.git).
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+## Help develop this plugin!
 
-For help getting started with Flutter development, view the
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+At the moment, only iOS devices are supported as I do not have an Android device to test on. If you have an Android device and would like to help develop this plugin, feel free to add pull requests.
 
+## Usage
+
+Please refer to the example app for how to use this plugin.
