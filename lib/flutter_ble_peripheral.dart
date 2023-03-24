@@ -58,12 +58,14 @@ class FlutterBlePeripheral {
     await _updateMethodCallHandler();
   }
 
-  void setOnDeviceConnectedCallback(Function(String) callback) {
+  Future<void> setOnDeviceConnectedCallback(Function(String) callback) async {
     _onDeviceConnected = callback;
+    await _updateMethodCallHandler();
   }
 
-  void setOnDeviceDisconnectedCallback(Function(String) callback) {
+  Future<void> setOnDeviceDisconnectedCallback(Function(String) callback) async {
     _onDeviceDisconnected = callback;
+    await _updateMethodCallHandler();
   }
 
   Future<void> _updateMethodCallHandler() async {
